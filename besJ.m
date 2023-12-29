@@ -1,10 +1,12 @@
-function bes = besJ(I,J,k0ai,ni,z)
-n = ni(J);
-if(z == 1)
+function bes = besJ(M,I,J,k0ai,ni)
+
+if(I == 0)
     n = 1;
+else
+    n = ni(I);
 end
 bes = zeros(2*M +1);
-for m = -M:1:M
-    bes(m + M + 1,m + M + 1) = besselj(m,n*k0ai(I));
+for m = -M:M
+    bes(m + M + 1,m + M + 1) = besselj(m,n*k0ai(J));
 end
 end

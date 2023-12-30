@@ -4,7 +4,7 @@ fin = 0; ka1 = 0.25; ka2 = 0.25; n1 = 2; n2 = 2; kd2 = 1.5; t1 = 0; t2 = pi;
 ka3 = 3;
 ep0 = 8.854187 * 1e-12;
 mi0 = 1.256637 * 1e-6;
-ep3 = linspace(ep0,4*ep0,100); % MAIN independent argument
+ep3 = linspace(ep0,4*ep0,2); % MAIN independent argument
 n3 = sqrt(ep3/ep0); % MAIN independent argument
 sigmab = zeros(1,length(n3));
 

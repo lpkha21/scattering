@@ -14,7 +14,7 @@ if(I == 0)
 end
 for m = -M:M
     for n = -M:M
-        a(n+M + 1,m + M + 1) = besselh(n - m, dist) * exp(-1j*(n - m) * ang);
+        a(m+M + 1,n + M + 1) = besselh(n - m, dist) * exp(-1j*(n - m) * ang);
     end
 end
 end

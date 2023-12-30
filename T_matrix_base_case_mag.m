@@ -7,9 +7,6 @@ niusi = ni(si) * niu0;
 
 t1 = niuL1* dbesH(M,L+1,si,k0ai,ni) - niusi* (dbesJ(M,si,si,k0ai,ni) / besJ(M,si,si,k0ai,ni)) *besH(M,L + 1,si,k0ai,ni);
 t2 = niuL1* dbesJ(M,L+1,si,k0ai,ni) - niusi* (dbesJ(M,si,si,k0ai,ni) / besJ(M,si,si,k0ai,ni)) *besJ(M,L + 1,si,k0ai,ni);
-epsilon = 1e-3;
-t1 = t1 + epsilon * eye(size(t1));
-t2 = t2 + epsilon * eye(size(t2));
-t = - (t1\t2);
 
+t = - (t1\t2);
 end

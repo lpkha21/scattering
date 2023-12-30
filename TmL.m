@@ -3,8 +3,7 @@ function Tl = TmL(L , M, k0ai,k0di, Thi, si, ni)
 
 % base case
 if(L == 1)
-    Tl = T_matrix_base_case_mag(L,M,k0ai,ni,si);
-    Tl = Tl + eye(size(Tl));
+    Tl = T_matrix_base_case_mag(L,M,k0ai,ni,si)*beta(M,k0di,Thi,si,0);
     return;
 end
 
@@ -15,11 +14,11 @@ Tlminus1 = TmL(L - 1,M,k0ai,k0di,Thi,si,ni);
 
 % --------------------------------
 first_sum = 0;
-for I = 1:L
+for I = 1:(L-1)
     first_sum = first_sum + alpha(M,k0di,Thi,L,si) * Tlminus1 * beta(M,k0di,Thi,0,si)*alpha(M,k0di,Thi,si,L);
 end
 second_sum = 0;
-for I = 1:L
+for I = 1:(L-1)
     second_sum = second_sum + alpha(M,k0di,Thi,L,si) * Tlminus1;
 end
 
@@ -31,4 +30,3 @@ TLB = first_part \ second_part;
 Tl = Tlminus1  + Tlminus1*beta(M,k0di,Thi,0,si)*alpha(M,k0di,Thi,si,L)*TLB;
 
 end
-

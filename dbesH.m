@@ -7,9 +7,10 @@ end
 dH = zeros(2*M +1);
 for m = -M:1:M
     if m < 0
-        dH(m + M + 1,m + M + 1) = (-1)^(-m) * (-m*besselh(-m,n*k0ai(J))/(n*k0ai(J)) - besselh(-m+1,n*k0ai(J)));
+        l = -m;
+        dH(m + M + 1,m + M + 1) = 0.5*(-1)^(l) * (besselh(l - 1,n*k0ai(J)) - besselh(l+1,n*k0ai(J)));
     else
-        dH(m + M + 1,m + M + 1) = m*besselh(m,n*k0ai(J))/(n*k0ai(J)) - besselh(m+1,n*k0ai(J));
+        dH(m + M + 1,m + M + 1) = 0.5*(besselh(m-1,n*k0ai(J)) - besselh(m+1,n*k0ai(J)));
     end
 end
 end

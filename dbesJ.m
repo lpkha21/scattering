@@ -7,9 +7,9 @@ end
 dJ = zeros(2*M +1);
 for m = -M:1:M
     if(m < 0)
-        dJ(m + M + 1,m + M + 1) = (-1)^(-m) * (-m*besselj(-m,n*k0ai(J))/(n*k0ai(J)) - besselj(-m+1,n*k0ai(J)));
+        dJ(m + M + 1,m + M + 1) = 0.5 * (-1)^(-m) * (besselj(-m-1,n*k0ai(J)) - besselj(-m+1,n*k0ai(J)));
     else
-        dJ(m + M + 1,m + M + 1) = m*besselj(m,n*k0ai(J))/(n*k0ai(J)) - besselj(m+1,n*k0ai(J));
+        dJ(m + M + 1,m + M + 1) = 0.5 * (besselj(m-1,n*k0ai(J)) - besselj(m+1,n*k0ai(J)));
     end
 end
 end

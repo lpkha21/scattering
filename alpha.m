@@ -1,5 +1,10 @@
 function a = alpha(M,k0di,Thi,J,I)
+assert(I ~= J);
 a = zeros(2*M + 1);
+if (I == J)
+   a = eye(2*M + 1);
+   return;
+end
 if (I ~= 0 && J ~= 0)
     dist = dij(k0di(J),k0di(I),Thi(J),Thi(I));
     ang = fij(k0di(J),k0di(I),Thi(J),Thi(I));
@@ -15,6 +20,7 @@ end
 for m = -M:M
     for n = -M:M
         a(m+M + 1,n + M + 1) = besselh(n - m, dist) * exp(-1j*(n - m) * ang);
+
     end
 end
 end

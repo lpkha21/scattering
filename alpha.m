@@ -1,10 +1,6 @@
 function a = alpha(M,k0di,Thi,J,I)
-assert(I ~= J);
 a = zeros(2*M + 1);
-if (I == J)
-   a = eye(2*M + 1);
-   return;
-end
+
 if (I ~= 0 && J ~= 0)
     dist = dij(k0di(J),k0di(I),Thi(J),Thi(I));
     ang = fij(k0di(J),k0di(I),Thi(J),Thi(I));

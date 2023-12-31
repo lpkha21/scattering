@@ -8,5 +8,5 @@ niusi = ni(si) * niu0;
 t1 =  niuL1* dbesH(M,L+1,si,k0ai,ni)-niusi* (dbesJ(M,si,si,k0ai,ni) / (besJ(M,si,si,k0ai,ni) + 1e-3*eye(2*M + 1))) *besH(M,L + 1,si,k0ai,ni)  ;
 t2 = niuL1* dbesJ(M,L+1,si,k0ai,ni) - niusi* (dbesJ(M,si,si,k0ai,ni) / (besJ(M,si,si,k0ai,ni) + 1e-3*eye(2*M + 1))) *besJ(M,L + 1,si,k0ai,ni) ;
 
-t = - ((vpa(t1)\t2) + 1*eye(2*M + 1));
+t = - ((vpa(t1)\t2));
 end

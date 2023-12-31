@@ -6,7 +6,7 @@ niuL = ni(L+1)*niu0;
 % ------ calculating TL aggregate T-matrix for the L cylinders
 Tm = zeros(2*M + 1);
 parfor k = 1:L
-    q =  beta(M,k0di,Thi,0,k)*TmL(L,L, M, k0ai, k0di, Thi, k, ni);
+    q =  beta(M,k0di,Thi,0,k)*TmLMag(L,L, M, k0ai, k0di, Thi, k, ni);
     Tm = Tm + q;
 end
 % ------

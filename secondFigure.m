@@ -37,9 +37,9 @@ parfor v = 1:length(n3)
     sigmabEl(v) = 2*pi*((abs(fE)).^2); % function to plot TE
     
 end
-plot(n1-n3,sigmabMag,'--');
+plot(n1-n3,sigmabMag);
 hold on
-plot(n1-n3,sigmabEl,'--');
+plot(n1-n3,sigmabEl);
 
 kd1 = 2.25;
 parfor v = 1:length(n3)

@@ -5,11 +5,8 @@ else
     n = ni(I);
 end
 dJ = zeros(2*M +1);
+z = n*k0ai(J);
 for m = -M:1:M
-    if(m < 0)
-        dJ(m + M + 1,m + M + 1) = 0.5 * (-1)^(-m) * (besselj(-m-1,n*k0ai(J)) - besselj(-m+1,n*k0ai(J)));
-    else
-        dJ(m + M + 1,m + M + 1) = 0.5 * (besselj(m-1,n*k0ai(J)) - besselj(m+1,n*k0ai(J)));
-    end
+    dJ(m + M + 1,m + M + 1) = m*besselj(m,z)/z - besselj(m+1,z);
 end
 end

@@ -5,12 +5,10 @@ else
     n = ni(I);
 end
 dH = zeros(2*M +1);
-for m = -M:1:M
-    if m < 0
-        l = -m;
-        dH(m + M + 1,m + M + 1) = 0.5*(-1)^(l) * (besselh(l - 1,n*k0ai(J)) - besselh(l+1,n*k0ai(J)));
-    else
-        dH(m + M + 1,m + M + 1) = 0.5*(besselh(m-1,n*k0ai(J)) - besselh(m+1,n*k0ai(J)));
-    end
+z = n*k0ai(J);
+for m = -M:M
+    
+    dH(m + M + 1,m + M + 1) = m*besselh(m,z)/z - besselh(m+1,z);
+
 end
 end

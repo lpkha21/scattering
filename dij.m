@@ -1,8 +1,8 @@
 function d = dij(di,dj,ti,tj)
-    yi = di * sin(ti);
     xi = di * cos(ti);
-    yj = dj * sin(tj);
+    yi = di * sin(ti);
     xj = dj * cos(tj);
+    yj = dj * sin(tj);
     
     d = sqrt((xi-xj)^2 + (yi-yj)^2);
 end

@@ -4,5 +4,9 @@ function f = fij(di,dj,ti,tj)
     yj = dj * sin(tj);
     xj = dj * cos(tj);
     
-    f = mod(atan((yj - yi)/(xj - xi))+2*pi,2*pi);
+    f = atan2(yj-yi,xj-xi);
+    
+    if f < 0
+       f = f + 2*pi;
+    end
 end

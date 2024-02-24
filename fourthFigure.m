@@ -11,7 +11,7 @@ sigmabMag = zeros(1,length(fin));
 sigmafMag = zeros(1,length(fin));
 L = 1;
 n1 = 4; n2 = 2;
-TL1 = T_matrix_L_mag(L, M, [ka1, ka3], [n1, n2], [kd1], [t1]);
+TL1 = double(T_matrix_L_mag(L, M, [ka1, ka3], [n1, n2], [kd1], [t1]));
 for v = 1:length(fin)
 
     fL1 = 0;

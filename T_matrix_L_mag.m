@@ -1,4 +1,5 @@
 function T = T_matrix_L_mag(L,M,k0ai,ni,k0di,Thi)
+digits(60)
 ep0 = 8.8541878128 * 1e-12;
 mi0 = 1.25663706212 * 1e-6;
 niu0 = vpa(sqrt(ep0/mi0),100);

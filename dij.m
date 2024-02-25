@@ -4,5 +4,5 @@ function d = dij(di,dj,ti,tj)
     xj = dj * cos(tj);
     yj = dj * sin(tj);
     
-    d = sqrt((xi-xj)^2 + (yi-yj)^2);
+    d = vpa(sqrt((xi-xj)^2 + (yi-yj)^2),500);
 end

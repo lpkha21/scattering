@@ -2,7 +2,7 @@ clc; clear;
 ka1 = 0.5; ka2 = 0.5; ka3 = 2.5; n1 = 4; n2 = 4; n3 = 2; kd1 = 1.5; kd2 = 1; th1 = 0; th2 = pi;
 
 
-Tm = double(T_matrix_L_mag(2,12,[ka1, ka2, ka3], [n1, n2, n3], [kd1, kd2], [th1, th2]));
+Tm = double(T_matrix_L_mag(1,12,[ka1,ka2, ka3], [n1,n2,n3], [kd1,kd2], [th1, th2]));
 
 
 fin = linspace(0, 2*pi, 40);
@@ -66,6 +66,6 @@ end
 
 plot(fin, sigmab)
 hold on
-plot(fin, sigmaf)
+% plot(fin, sigmaf)
 xlim([0,2*pi])
-
+ylim([0, 120])

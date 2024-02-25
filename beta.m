@@ -12,7 +12,7 @@ if J < I
     end
     for m = -M:M
         for n = -M:M
-            b(n + M + 1,m + M + 1) = besselj(n-m,dist) * exp(1j*(m-n)*ang);
+            b(n + M + 1,m + M + 1) = vpa(besselj(n-m,dist) * exp(1j*(m-n)*ang),500);
         end
     end
     return;
@@ -27,7 +27,7 @@ else
 end
 for m = -M:M
     for n = -M:M
-        b(n + M + 1,m + M + 1) = (-1)^(n-m)*besselj(n-m,dist) * exp(1j*(m-n)*ang);
+        b(n + M + 1 ,m + M + 1) = vpa((-1)^(n-m)*besselj(n-m,dist) * exp(1j*(m-n)*ang),500);
     end
 end
 

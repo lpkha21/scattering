@@ -1,19 +1,18 @@
 clc; clear;
 ka1 = 0.5; ka2 = 0.5; ka3 = 2.5; n1 = 4; n2 = 4; n3 = 2; kd1 = 1.5; kd2 = 1; th1 = 0; th2 = pi;
 
-
-Tm = double(T_matrix_L_mag(1,12,[ka1,ka2, ka3], [n1,n2,n3], [kd1,kd2], [th1, th2]));
+N = 12;
+Tm = double(T_matrix_L_mag(0,N,[ka3, ka3], [ n3, n3], [kd1], [th1]));
 
 
 fin = linspace(0, 2*pi, 40);
 
 sigmab = zeros(size(fin));
 sigmaf = zeros(size(fin));
-N = 12;
+
 for v = 1:length(fin)
     fL1 = 0;
-    sigt = 0;
-    
+    fL2 = 0;
     f1t = 0;
     f2t = 0;
     
@@ -25,24 +24,20 @@ for v = 1:length(fin)
     
     
     for n = -N:N
-        sigt1 = 0;
-        finside = 0;
 
         for np = -N:N
             
-            f1opt = f1opt + ((-1j)^n) * ((1j)^np) * exp(1j*(n*fi - fin(v)*np)) * Tm(n + 12 + 1, np + 12 + 1);
-            f2opt = f2opt + ((-1j)^n) * ((1j)^np) * exp(1j*(n*fin(v) - fin(v)*np)) * Tm(n + 12 + 1, np + 12 + 1);            
+            f1opt = f1opt + ((-1j)^n) * ((1j)^np) * exp(1j*(n*fi - fin(v)*np)) * Tm(n + N + 1, np + N + 1);
+            f2opt = f2opt + ((-1j)^n) * ((1j)^np) * exp(1j*(n*fin(v) - fin(v)*np)) * Tm(n + N + 1, np + N + 1);            
             
-            f1t = f1t + (-1j)^n * (1j)^np * exp(1j*((0)*n - np*fin(v))) * Tm(n + 13, np + 13);
-            f2t = f2t + (-1j)^n * (1j)^np * exp(1j*((fin(v) + pi)*n - np*pi)) * Tm(n + 13, np + 13);
+            f1t = f1t + (-1j)^n * (1j)^np * exp(1j*((0)*n - np*fin(v))) * Tm(n + N + 1, np + N + 1);
+            f2t = f2t + (-1j)^n * (1j)^np * exp(1j*((fin(v) + pi)*n - np*pi)) * Tm(n + N + 1, np + N + 1);
             
             
             fi0 = fin(v) + pi;
             fL1 = fL1 + (-1j).^n .* (1j) .^ np .* exp(1j *(n*fi0 - np*fin(v))) .* Tm(n + N + 1, np + N + 1);
-            sigt1 = sigt1 + (1j).^(np) .*exp(-1j*np*fin(v)).*Tm(n + N + 1, np + N + 1);
+            fL2 = fL2 + (-1j).^n .* (1j) .^ np .* exp(1j *(n*fin(v) - np*fin(v))) .* Tm(n + N + 1, np + N + 1);
         end
-        sigt = sigt + ((abs(sigt1))).^2;
-
     end
     f1opt = f1opt*(1-1j)/sqrt(pi);
     f2opt = f2opt*(1-1j)/sqrt(pi);
@@ -60,12 +55,13 @@ for v = 1:length(fin)
     
     
     fL1 = (1-1j)/(sqrt(pi)) * fL1;
+    fL2 = (1-1j)/(sqrt(pi)) * fL2;
     sigmab(v) = 2*pi*((abs(fL1)).^2); % function to plot TL    
-    sigmaf(v) = 4*sigt - sigmab(v);
+    sigmaf(v) = 2*pi*((abs(fL2)).^2);
 end
 
 plot(fin, sigmab)
 hold on
-% plot(fin, sigmaf)
+plot(fin, sigmaf)
 xlim([0,2*pi])
 ylim([0, 120])

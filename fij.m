@@ -4,11 +4,9 @@ function f = fij(di,dj,ti,tj)
     yj = dj * sin(tj);
     xj = dj * cos(tj);
     
-    f = vpa(atan2(yj-yi,xj-xi),500);
+    f = atan2(yj-yi,xj-xi);
     
     if f < 0
-       f = vpa(f + 2*pi,500);
+       f = f + 2*pi;
     end
-    
-    
 end

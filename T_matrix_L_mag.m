@@ -12,7 +12,7 @@ end
 f = vpa(besJ(M,L+1,L+1,k0ai,ni),100) + vpa(besH(M,L+1,L+1,k0ai,ni) * Tm,100);
 df = vpa(dbesJ(M,L+1,L+1,k0ai,ni),100) + vpa(dbesH(M,L+1,L+1,k0ai,ni),100) * Tm;
 
-first = niu0*dbesH(M,0,L+1,k0ai,ni) - niuL*((vpa(df,100) / vpa(f,100)) * besH(M,0,L+1,k0ai,ni));
+first  = niu0*dbesH(M,0,L+1,k0ai,ni) - niuL*((vpa(df,100) / vpa(f,100)) * besH(M,0,L+1,k0ai,ni));
 second = niu0*dbesJ(M,0,L+1,k0ai,ni) - niuL*((vpa(df,100) / vpa(f,100)) * besJ(M,0,L+1,k0ai,ni));
 
 T = -(vpa(first,100) \ vpa(second,100));

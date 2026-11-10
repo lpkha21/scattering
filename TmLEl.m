@@ -1,5 +1,7 @@
 function Tl = TmLEl(L ,l, M, k0ai,k0di, Thi, si, ni)
-
+% TE: returns T_{si(l)} * beta_{si,0}, the T-matrix of cylinder si in the presence
+% of the first l cylinders (recursive algorithm, paper Eqs. 9-10).
+% k0di must already be k_host*d.
 
 % base case
 if(l == 1)
@@ -7,30 +9,23 @@ if(l == 1)
     return;
 end
 
-% recursive step
-
-
-% --------------------------------
-first_sum = 0;
-parfor I = 1:(l-1)
-    first_sum = first_sum + alpha(M,k0di,Thi,l,I) * TmLEl(L,l-1,M,k0ai,k0di,Thi,I,ni) * beta(M,k0di,Thi,0,I)*alpha(M,k0di,Thi,I,l);
+% recursive step: compute the (l-1)-cylinder results once and reuse them
+Tprev = cell(1, l-1);
+for I = 1:(l-1)
+    Tprev{I} = TmLEl(L,l-1,M,k0ai,k0di,Thi,I,ni);
 end
-second_sum = 0;
-parfor I = 1:(l-1)
-    second_sum = second_sum + alpha(M,k0di,Thi,l,I) * TmLEl(L,l-1,M,k0ai,k0di,Thi,I,ni);
+first_sum = zeros(2*M + 1);
+second_sum = zeros(2*M + 1);
+for I = 1:(l-1)
+    first_sum  = first_sum  + alpha(M,k0di,Thi,l,I) * Tprev{I} * beta(M,k0di,Thi,0,I) * alpha(M,k0di,Thi,I,l);
+    second_sum = second_sum + alpha(M,k0di,Thi,l,I) * Tprev{I};
 end
+Tl1 = T_matrix_base_case_el(L,M,k0ai,ni,l);
+TLB = (eye(2*M + 1) - Tl1*first_sum) \ (Tl1*(beta(M,k0di,Thi,l,0) + second_sum));   % Eq. (9)
 
-first_part = eye(2*M + 1) - T_matrix_base_case_el(L,M,k0ai,ni,l)*first_sum;
-
-second_part = T_matrix_base_case_el(L,M,k0ai,ni,l)* ( beta(M,k0di,Thi,l,0) + second_sum);
-
-TLB = vpa(first_part )\ vpa(second_part );
 if(si == l)
    Tl = TLB;
    return;
 end
-Tlminus1 = TmLEl(L,l - 1,M,k0ai,k0di,Thi,si,ni);
-
-Tl = Tlminus1  + Tlminus1*beta(M,k0di,Thi,0,si)*alpha(M,k0di,Thi,si,l)*TLB;
-% Tl
+Tl = Tprev{si} + Tprev{si}*beta(M,k0di,Thi,0,si)*alpha(M,k0di,Thi,si,l)*TLB;   % Eq. (10)
 end

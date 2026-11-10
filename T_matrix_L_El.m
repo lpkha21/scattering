@@ -1,21 +1,26 @@
 function T = T_matrix_L_El(L,M,k0ai,ni,k0di,Thi)
-ep0 = 8.854187 * 1e-12;
-mi0 = 1.256637 * 1e-6;
-niu0 = sqrt(ep0/mi0);
-niuL = ni(L+1)*niu0;
-% ------ calculating TL aggregate T-matrix for the L cylinders
+% TE aggregate T-matrix T_{L+1} of the host cylinder with L inclusions
+% (paper Eqs. 7, 25, 26-27).
+%   k0ai = [k0*a_1 ... k0*a_L, k0*a_host]
+%   ni   = [n_1 ... n_L, n_host]       (Inf = perfect conductor)
+%   k0di = [k0*d_1 ... k0*d_L],  Thi = [theta_1 ... theta_L] in radians
+
+% FIX: waves are translated between cylinders inside the host, where the
+% wavenumber is k_host = n_host*k0, so alpha/beta need k_host*d, not k0*d.
+k0di = ni(L+1) * k0di;
+
+% ------ T_L: aggregate T-matrix of the L inclusions seen from the host centre, Eq. (7)
 Tm = zeros(2*M + 1);
-parfor k = 1:L
-    q =  beta(M,k0di,Thi,0,k)*TmLEl(L,L, M, k0ai, k0di, Thi, k, ni);
-    Tm = Tm + q;
+for k = 1:L
+    Tm = Tm + beta(M,k0di,Thi,0,k) * TmLEl(L,L,M,k0ai,k0di,Thi,k,ni);
 end
-% ------
-f = besJ(M,L+1,L+1,k0ai,ni) + besH(M,L+1,L+1,k0ai,ni) * Tm;
-df = dbesJ(M,L+1,L+1,k0ai,ni) + dbesH(M,L+1,L+1,k0ai,ni) * Tm;
-    
-first = niuL*dbesH(M,0,L+1,k0ai,ni) - niu0*((df / f) * besH(M,0,L+1,k0ai,ni));
-second = niuL*dbesJ(M,0,L+1,k0ai,ni) - niu0*((df / f) * besJ(M,0,L+1,k0ai,ni));
+% ------ outer boundary of the host
+f  = besJ(M,L+1,L+1,k0ai,ni)  + besH(M,L+1,L+1,k0ai,ni)  * Tm;    % Eq. (26)
+df = dbesJ(M,L+1,L+1,k0ai,ni) + dbesH(M,L+1,L+1,k0ai,ni) * Tm;    % Eq. (27)
+G = df / f;
 
-T = -(vpa(first) \ vpa(second));
+first  = ni(L+1)*dbesH(M,0,L+1,k0ai,ni) - G*besH(M,0,L+1,k0ai,ni);
+second = ni(L+1)*dbesJ(M,0,L+1,k0ai,ni) - G*besJ(M,0,L+1,k0ai,ni);
+
+T = -(first \ second);                                            % Eq. (25)
 end
-

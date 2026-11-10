@@ -1,66 +1,36 @@
-clc;
-N = 12; M = 12;
-ka1 = 0.5; ka2 = 0.5;  kd1 = 1.5; kd2 = 1; t1 = 0; t2 = pi;
+% Fig. 6: backscattering k0*sigma_b and forward scattering k0*sigma_f vs. incidence
+% angle, TM, perfectly conducting inclusions.
+clc; clear;
+M = 12;
+ka1 = 0.5; ka2 = 0.5; kd1 = 1.5; kd2 = 1; t1 = 0; t2 = pi;
 ka3 = 2.5; n3 = 2;
-ep0 = 8.854187 * 1e-12;
-mi0 = 1.256637 * 1e-6;
+nin = Inf;                     % index of the inclusions (Inf = perfect conductor)
+Tfun = @T_matrix_L_mag;      % TM
+fin = linspace(0, 2*pi, 361);         % FIX: finer grid (was 50 points)
 
-fin = linspace(0,2*pi,50); % MAIN ARGUMENT
+Ts = cell(1, 3);
+Ts{1} = Tfun(1, M, [ka1, ka3], [nin, n3], kd1, t1);                          % (1) single inclusion
+Ts{2} = Tfun(2, M, [ka1, ka2, ka3], [nin, nin, n3], [kd1, kd2], [t1, t2]);   % (2) two inclusions
+Ts{3} = Tfun(0, M, ka3, n3, [], []);                                          % (3) no inclusions (FIX: was missing)
 
-sigmabMag = zeros(1,length(fin));
-sigmafMag = zeros(1,length(fin));
-L = 1;
-n1 = 1000; n2 = 2;
-TL1 = T_matrix_L_mag(L, M, [ka1, ka3], [n1, n2], [kd1], [t1]);
-for v = 1:length(fin)
-
-    fL1 = 0;
-    sigt = 0;
-    for n = -N:N
-        sigt1 = 0;
-        for np = -N:N
-            fi0 = fin(v) + pi;
-            fL1 = fL1 + (-1j).^n .* (1j) .^ np .* exp(1j *(n*fi0 - np*fin(v))) .* TL1(n + N + 1, np + N + 1);
-            sigt1 = sigt1 + (1j).^(np) .*exp(-1j*np*fin(v)).*TL1(n + N + 1, np + N + 1);
-        end
-        sigt = sigt + ((abs(sigt1))).^2;
-    end
-    fL1 = (1-1j)/(sqrt(pi)) * fL1;
-    sigmabMag(v) = 2*pi*((abs(fL1)).^2); % function to plot TL    
-    sigmafMag(v) = 4*sigt - sigmabMag(v);
+sb = zeros(3, length(fin));
+sf = zeros(3, length(fin));
+for c = 1:3
+    for v = 1:length(fin)
+        sb(c, v) = k0sigma(Ts{c}, fin(v), fin(v) + pi);   % backscattering: look back at the source
+        sf(c, v) = k0sigma(Ts{c}, fin(v), fin(v));        % FIX: forward = sigma_d at phi0 = phi_in
+    end                                                    % (was sigma_t - sigma_b, which is wrong)
 end
-plot(fin,sigmabMag,'--');
 
-hold on;
-plot(fin,sigmafMag,'--');
-xlabel('fin');ylabel('k0sigmab, k0sigmaf');
-
-sigmabMag1 = zeros(1,length(fin));
-sigmafMag1 = zeros(1,length(fin));
-L = 2;
-n1 = 1000; n2 = 1000;
-TL1 = T_matrix_L_mag(L, M, [ka1,ka2, ka3], [n1,n2, n3], [kd1,kd2], [t1,t2]);
-for v = 1:length(fin)
-
-    fL1 = 0;
-    sigt = 0;
-    for n = -N:N
-        sigtin = 0;
-        for np = -N:N
-            fi0 = fin(v) + pi;
-            fL1 = fL1 + (-1j).^n .* (1j) .^ np .* exp(1j *(n*fi0 - np*fin(v))) .* TL1(n + N + 1, np + N + 1);
-            sigtin = sigtin + (1j).^(np) .*exp(-1j*np*fin(v)) .*TL1(n + N + 1, np + N + 1);
-        end
-        sigt = sigt + ((abs(sigtin))).^2;
-    end
-    fL1 = (1-1j)/(sqrt(pi)) * fL1;
-    sigmabMag1(v) = 2*pi*((abs(fL1)).^2); % function to plot TL    
-    sigmafMag1(v) = 4*sigt - sigmabMag(v);
+cols  = [0.85 0.33 0.10; 0 0.45 0.74; 0 0 0];
+names = {'(1) one inclusion', '(2) two inclusions', '(3) no inclusions'};
+deg = rad2deg(fin);
+figure; hold on; grid on;
+for c = 1:3
+    plot(deg, sf(c,:), '-',  'Color', cols(c,:), 'LineWidth', 1.5, 'DisplayName', [names{c} ', forward']);
+    plot(deg, sb(c,:), '--', 'Color', cols(c,:), 'LineWidth', 1.5, 'DisplayName', [names{c} ', back']);
 end
-plot(fin,sigmabMag1);
-
-plot(fin,sigmafMag1);
-legend('singleBack','singleForw','twoBack','twoForw');
-
-ylim([0 40]);
-xlim([0 2*pi]);
+legend('show', 'Location', 'bestoutside');
+xlim([0 360]); xticks(0:90:360); ylim([0 140]);
+xlabel('\phi^{in} (deg)'); ylabel('k_0\sigma_b, k_0\sigma_f');
+title('Fig. 6: TM, perfectly conducting inclusions');

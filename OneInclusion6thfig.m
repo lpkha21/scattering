@@ -1,5 +1,6 @@
+% Optical-theorem test, single perfectly conducting inclusion (n1 = Inf).
 clear;clc;
-ka1 = 0.5; ka2 = 2.5; n1 = 1e308; n2 = 2.0; kd1 = 1.5; th1 = 0;
+ka1 = 0.5; ka2 = 2.5; n1 = Inf;   n2 = 2.0; kd1 = 1.5; th1 = 0;
 
 
 fin = linspace(0, 2*pi, 50);
